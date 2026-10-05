@@ -1,11 +1,13 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Asistente } from '../../models/asistente.model';
 import { Charla } from '../../models/charla.model';
 import { CharlaService } from '../../services/charla.service';
+import { InscripcionForm } from '../inscripcion-form/inscripcion-form';
 
 @Component({
   selector: 'app-agenda',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, InscripcionForm],
   templateUrl: './agenda.html',
   styleUrl: './agenda.css',
 })
@@ -15,6 +17,7 @@ export class Agenda implements OnInit {
 
   charlas = signal<Charla[]>([]);
   error = signal('');
+  charlaAbierta = signal<number | null>(null);
 
   charlaForm = this.fb.nonNullable.group({
     titulo: ['', [Validators.required, Validators.minLength(3)]],
@@ -46,5 +49,15 @@ export class Agenda implements OnInit {
       },
       error: () => this.error.set('No se pudo registrar la charla.'),
     });
+  }
+
+  toggleInscripcion(charlaId: number): void {
+    this.charlaAbierta.set(this.charlaAbierta() === charlaId ? null : charlaId);
+  }
+
+  agregarAsistente(charlaId: number, asistente: Asistente): void {
+    this.charlas.update((lista) =>
+      lista.map((c) => (c.id === charlaId ? { ...c, asistentes: [...c.asistentes, asistente] } : c)),
+    );
   }
 }

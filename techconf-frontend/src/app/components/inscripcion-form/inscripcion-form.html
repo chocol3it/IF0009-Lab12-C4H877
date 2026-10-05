@@ -1,0 +1,32 @@
+<form [formGroup]="inscripcionForm" (ngSubmit)="inscribir()">
+  <div formGroupName="asistente">
+    <input formControlName="nombre" placeholder="Nombre completo" />
+    @if (asistente.nombre.touched && asistente.nombre.errors?.['required']) {
+      <small>El nombre es requerido.</small>
+    }
+    @if (asistente.nombre.touched && asistente.nombre.errors?.['minlength']) {
+      <small>El nombre debe tener al menos 3 caracteres.</small>
+    }
+
+    <input formControlName="correo" placeholder="Correo electronico" />
+    @if (asistente.correo.touched && asistente.correo.errors?.['required']) {
+      <small>El correo es requerido.</small>
+    }
+    @if (asistente.correo.touched && asistente.correo.errors?.['email']) {
+      <small>El correo no tiene un formato valido.</small>
+    }
+
+    <input formControlName="edad" type="number" placeholder="Edad" />
+    @if (asistente.edad.touched && asistente.edad.errors?.['required']) {
+      <small>La edad es requerida.</small>
+    }
+    @if (asistente.edad.touched && asistente.edad.errors?.['menorDeEdad']) {
+      <small>El asistente debe ser mayor de edad (18 o mas).</small>
+    }
+  </div>
+
+  @if (error()) {
+    <small>{{ error() }}</small>
+  }
+  <button type="submit">Inscribir</button>
+</form>

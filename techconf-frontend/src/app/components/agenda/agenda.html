@@ -32,6 +32,25 @@
       <h3>{{ charla.titulo }}</h3>
       <p><strong>Ponente:</strong> {{ charla.ponente }}</p>
       <p><strong>Sala:</strong> {{ charla.sala }} | <strong>Hora:</strong> {{ charla.hora }}</p>
+
+      <p><strong>Asistentes ({{ charla.asistentes.length }}):</strong></p>
+      <ul>
+        @for (asistente of charla.asistentes; track asistente.id) {
+          <li>{{ asistente.nombre }} - {{ asistente.correo }} ({{ asistente.edad }} años)</li>
+        } @empty {
+          <li>Sin asistentes inscritos.</li>
+        }
+      </ul>
+
+      <button type="button" (click)="toggleInscripcion(charla.id!)">
+        {{ charlaAbierta() === charla.id ? 'Cerrar' : 'Inscribir Asistente' }}
+      </button>
+      @if (charlaAbierta() === charla.id) {
+        <app-inscripcion-form
+          [charlaId]="charla.id!"
+          (inscrito)="agregarAsistente(charla.id!, $event)"
+        />
+      }
     </article>
   } @empty {
     <p>No hay charlas registradas.</p>
