@@ -39,7 +39,7 @@ export class Agenda implements OnInit {
       this.charlaForm.markAllAsTouched();
       return;
     }
-    this.charlaService.crear(this.charlaForm.getRawValue()).subscribe({
+    this.charlaService.crear({ ...this.charlaForm.getRawValue(), asistentes: [] }).subscribe({
       next: (nueva) => {
         this.charlas.update((lista) => [...lista, nueva]);
         this.charlaForm.reset();
