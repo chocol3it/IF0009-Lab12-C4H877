@@ -1,6 +1,10 @@
 package cr.ac.ucr.paraiso.ie.c4h877.techconf.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -25,6 +29,9 @@ public class Charla {
     @NotBlank
     @Column(nullable = false)
     private String hora;
+
+    @OneToMany(mappedBy = "charla", cascade = CascadeType.ALL)
+    private List<@Valid Asistente> asistentes = new ArrayList<>();
 
     public Charla() {
     }
@@ -67,5 +74,13 @@ public class Charla {
 
     public void setHora(String hora) {
         this.hora = hora;
+    }
+
+    public List<Asistente> getAsistentes() {
+        return asistentes;
+    }
+
+    public void setAsistentes(List<Asistente> asistentes) {
+        this.asistentes = asistentes;
     }
 }
