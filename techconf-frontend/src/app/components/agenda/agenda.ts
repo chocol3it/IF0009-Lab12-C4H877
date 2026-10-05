@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { crearAsistenteForm } from '../../forms/asistente-form';
 import { Asistente } from '../../models/asistente.model';
 import { Charla } from '../../models/charla.model';
 import { CharlaService } from '../../services/charla.service';
@@ -24,7 +25,12 @@ export class Agenda implements OnInit {
     ponente: ['', Validators.required],
     sala: ['', Validators.required],
     hora: ['', Validators.required],
+    asistentes: this.fb.array([] as ReturnType<typeof crearAsistenteForm>[]),
   });
+
+  get asistentesForm() {
+    return this.charlaForm.controls.asistentes;
+  }
 
   ngOnInit(): void {
     this.cargarCharlas();
@@ -42,13 +48,22 @@ export class Agenda implements OnInit {
       this.charlaForm.markAllAsTouched();
       return;
     }
-    this.charlaService.crear({ ...this.charlaForm.getRawValue(), asistentes: [] }).subscribe({
+    this.charlaService.crear(this.charlaForm.getRawValue() as Charla).subscribe({
       next: (nueva) => {
         this.charlas.update((lista) => [...lista, nueva]);
         this.charlaForm.reset();
+        this.asistentesForm.clear();
       },
       error: () => this.error.set('No se pudo registrar la charla.'),
     });
+  }
+
+  agregarAsistenteForm(): void {
+    this.asistentesForm.push(crearAsistenteForm(this.fb));
+  }
+
+  quitarAsistenteForm(index: number): void {
+    this.asistentesForm.removeAt(index);
   }
 
   toggleInscripcion(charlaId: number): void {

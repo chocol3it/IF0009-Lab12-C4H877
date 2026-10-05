@@ -17,6 +17,33 @@
     @if (charlaForm.controls.hora.touched && charlaForm.controls.hora.invalid) {
       <small>La hora es requerida.</small>
     }
+
+    <div formArrayName="asistentes" class="asistentes">
+      <strong>Asistentes iniciales (opcional)</strong>
+      @for (grupo of asistentesForm.controls; track grupo; let i = $index) {
+        <fieldset [formGroupName]="i">
+          <legend>Asistente {{ i + 1 }}</legend>
+          <input formControlName="nombre" placeholder="Nombre completo" />
+          @if (grupo.controls.nombre.touched && grupo.controls.nombre.invalid) {
+            <small>Nombre requerido (minimo 3 caracteres).</small>
+          }
+          <input formControlName="correo" placeholder="Correo electronico" />
+          @if (grupo.controls.correo.touched && grupo.controls.correo.invalid) {
+            <small>Correo requerido con formato valido.</small>
+          }
+          <input formControlName="edad" type="number" placeholder="Edad" />
+          @if (grupo.controls.edad.touched && grupo.controls.edad.errors?.['required']) {
+            <small>La edad es requerida.</small>
+          }
+          @if (grupo.controls.edad.touched && grupo.controls.edad.errors?.['menorDeEdad']) {
+            <small>El asistente debe ser mayor de edad (18 o mas).</small>
+          }
+          <button type="button" (click)="quitarAsistenteForm(i)">Quitar</button>
+        </fieldset>
+      }
+      <button type="button" (click)="agregarAsistenteForm()">+ Agregar asistente</button>
+    </div>
+
     <button type="submit">Guardar charla</button>
   </form>
 </section>
