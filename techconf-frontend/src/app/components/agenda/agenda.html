@@ -1,0 +1,39 @@
+<section class="nueva-charla">
+  <h2>Registrar charla</h2>
+  <form [formGroup]="charlaForm" (ngSubmit)="registrarCharla()">
+    <input formControlName="titulo" placeholder="Titulo" />
+    @if (charlaForm.controls.titulo.touched && charlaForm.controls.titulo.invalid) {
+      <small>El titulo es requerido (minimo 3 caracteres).</small>
+    }
+    <input formControlName="ponente" placeholder="Ponente" />
+    @if (charlaForm.controls.ponente.touched && charlaForm.controls.ponente.invalid) {
+      <small>El ponente es requerido.</small>
+    }
+    <input formControlName="sala" placeholder="Sala" />
+    @if (charlaForm.controls.sala.touched && charlaForm.controls.sala.invalid) {
+      <small>La sala es requerida.</small>
+    }
+    <input formControlName="hora" type="time" />
+    @if (charlaForm.controls.hora.touched && charlaForm.controls.hora.invalid) {
+      <small>La hora es requerida.</small>
+    }
+    <button type="submit">Guardar charla</button>
+  </form>
+</section>
+
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+<h2>Agenda</h2>
+<div class="tarjetas">
+  @for (charla of charlas(); track charla.id) {
+    <article class="tarjeta">
+      <h3>{{ charla.titulo }}</h3>
+      <p><strong>Ponente:</strong> {{ charla.ponente }}</p>
+      <p><strong>Sala:</strong> {{ charla.sala }} | <strong>Hora:</strong> {{ charla.hora }}</p>
+    </article>
+  } @empty {
+    <p>No hay charlas registradas.</p>
+  }
+</div>

@@ -1,0 +1,32 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 400px;
+}
+
+input {
+  padding: 6px;
+}
+
+small,
+.error {
+  color: #c62828;
+}
+
+button {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.tarjeta {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+}
